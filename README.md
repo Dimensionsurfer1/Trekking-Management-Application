@@ -30,3 +30,5 @@ after testing db:
 
 This is the completion of the milestone 1
 I encountered countless spelling mistakes like user and users, it must be there in my previous commit too also I made a init_db.py to initialize the databse and also I inserted an admin with name Aryan Saxena.
+
+this is a small change commit cause I have been using a diff account to push code to this repo
