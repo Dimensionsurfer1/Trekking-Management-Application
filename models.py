@@ -17,8 +17,8 @@ class User(db.Model):
     email_id = db.Column(db.String(100), unique=True, nullable=False)
 
     # include the FK or realtions after completeing all the oter tables.
-    staff_profile = db.relationship('StaffProfile', backref='user', uselist=False, cascade="all, delete-orphan")
-    # here cascade is a management rule to determine what to do with the child data once their parent recod is deleted or modified 
+    staff_profile = db.relationship('Staff_profiles', backref='users', uselist=False, cascade="all, delete-orphan")
+    # here cascade is a management rule to determine what to do with the child data once their parent record is deleted or modified 
     bookings = db.relationship('Booking', backref='trekker', lazy=True)
     # lazy helps in not showing unecessary data
 
@@ -26,9 +26,8 @@ class Staff_profiles(db.Model):
     __tablename__ = "staff_profiles"
 
     id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.Foreignkey("user.id"),nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"),nullable = False)
     status = db.Column(db.String(30), default = "pending") # other values can be Approved and Balcklisted also idle & approved, approved & working
-    contact_details = db.Column(db.String(15), nullable = False)
 
     #reference
 
@@ -36,7 +35,7 @@ class Staff_profiles(db.Model):
 
     @property # this is a decorator, calls a diff function and modifies it
     def contact_details(self): # here we are trying to get contacts from the user table 
-        return self.user.contact_details
+        return self.users.contact_details
 
 class Trek(db.Model):
     __tablename__ = 'treks'

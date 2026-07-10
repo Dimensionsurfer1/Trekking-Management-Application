@@ -23,3 +23,10 @@ Hey! This is my project for the Modern Application Development I (MAD-I) course.
 
 3. some small mistakes that i made was with the first letter capital letter when we write db.Column but it is not the same case for db.relationship, still have to figure this out.
 
+after testing db:
+
+1.there were a lot of mistakes, like while making Foreignkey the K should be capital, and more with the capital letter once also wrote ProfileStaff while my table was named profile_staff
+2. I did not remove the manual contact so it was having conflict basically overriding the data.
+
+This is the completion of the milestone 1
+I encountered countless spelling mistakes like user and users, it must be there in my previous commit too also I made a init_db.py to initialize the databse and also I inserted an admin with name Aryan Saxena.
