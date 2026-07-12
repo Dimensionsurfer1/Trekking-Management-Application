@@ -1,3 +1,10 @@
+/* Hey so I did not think but I saw a video stating it 
+is better not to seperate css files for every page
+as there we will have to write it all from the scratch
+and we can always wrap a content in a class and then customise it
+to our liking.*/
+
+
 html, body {
     margin: 0;
     padding: 0;
@@ -81,4 +88,87 @@ html, body {
 .signup-btn:hover {
     background-color: #f0f0f0;
     transform: scale(1.05);
+}
+
+
+
+/* This section is for the login and signup pages. */
+
+.form-container {
+    background-color: rgba(255, 255, 255, 0.92);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    width: 350px;
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-container input, 
+.form-container select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+.submit-btn {
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background-color: #555;
+    transform: scale(1.02);
+}
+
+.form-container p {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.form-container p a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form-container p a:hover {
+    text-decoration: underline;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #7f8c8d;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.back-link:hover {
+    color: #333;
+    text-decoration: underline;
 }
