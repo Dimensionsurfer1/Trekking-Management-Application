@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Trekking app</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- this one is specifically for phones so that they don't zoom out on phone
+         screens -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='TMA_base.css') }}">
+        <!-- Linking the styles in the static folder, this is a jinja2 command -->
+    </head>
+    <body>
+
+        <nav class="navbar">
+            <a href="/">Trekking Management</a>
+        </nav>
+
+        <div class = "main-container">
+            {% block content %}
+            <div class="nature_background">
+                <div class="page-content">
+                    <h1 class="site-name">Alpine Path</h1>
+                    <p class="slogan">Nature Calls. We Guide.</p>
+                    
+                    <div class="button-group">
+                        <a href="/login" class="login-btn">Signin / Login</a>
+                        <a href="/signup" class="signup-btn">Signup</a>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+
+        </div>
+        
+    </body>
+</html>

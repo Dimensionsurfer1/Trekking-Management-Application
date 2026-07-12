@@ -1,0 +1,84 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* This is to lock-in so no scroll bar. */
+}
+
+
+.navbar {
+    display: none;
+}
+
+.main-container {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+}
+
+.nature_background {
+    background-image: url('images/login_page_bag2.png'); 
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-content {
+    text-align: center;
+    margin-top: -320px; 
+}
+
+.site-name {
+    font-size: 5rem;
+    color: white;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); 
+}
+
+.slogan {
+    font-size: 2rem;
+    color: white;
+    margin-top: 0px;
+    margin-bottom: 150px; 
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+}
+
+.login-btn {
+    background-color: white;
+    color: #333; 
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.login-btn:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}
+
+.signup-btn {
+    background-color: white;
+    color: #333; 
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.signup-btn:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}

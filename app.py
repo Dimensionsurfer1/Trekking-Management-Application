@@ -18,8 +18,8 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    # first gonna test with just text
-    return f"the trekking management app is alive and thriving lol, the db should be connected"
+   
+    return render_template('TMA_base.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
