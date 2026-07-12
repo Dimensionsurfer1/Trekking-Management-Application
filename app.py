@@ -103,6 +103,32 @@ def login():
             return redirect(url_for('login'))
     return render_template ('login.html')
 
+@app.route('/admin-dashboard')
+def admin_dashboard():
+    if 'user_id' not in session or session.get('role') != 'Admin':
+        # if not in session or not admin role
+        flash("unauthorized access")
+        return redirect(url_for(login))
+    return "<h1> Admin Dashboard (under construction) <h1>"
+@app.route('/staff_dashboard')
+def staff_dashboard():
+    if 'user_id' not in session or session.get('role') != 'Staff':
+        flash("Unauthorized access!")
+        return redirect(url_for('login'))
+    return "<h1>Staff Dashboard (Under Construction)</h1>"
+
+@app.route('/user_dashboard')
+def user_dashboard():
+    if 'user_id' not in session or session.get('role') != 'Trekker':
+        flash("Unauthorized access!")
+        return redirect(url_for('login'))
+    return "<h1>Trekker Dashboard (Under Construction)</h1>"
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
+
 if __name__ == '__main__':
     app.run(debug=True)
  # I have set the debug to be true so that If anything occurs I won't have to restart app again and again

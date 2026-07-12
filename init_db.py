@@ -1,6 +1,6 @@
 from flask import Flask
 from models import db, User
-
+from werkzeug.security import generate_password_hash
 
 # we are creating this function so that we can create it only once and when we use this script in our terminal
 # if I import this file into another script it won't trigger accidentally 
@@ -21,7 +21,7 @@ def initialize_database():
         # Insert a valid admin record matching our new schema constraints
         admin = User(
             username="superadmin",
-            password="admin123*",
+            password = generate_password_hash("admin123*"), # must work
             role="Admin",
             name="Aryan Saxena",
             contact_details="9295239548",
