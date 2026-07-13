@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from models import db, User, Staff_profiles, Trek
+from models import db, User, Staff_profiles, Trek, Booking
 from werkzeug.security import generate_password_hash, check_password_hash
 # new import for security 
 
@@ -58,9 +58,10 @@ def signup():
         db.session.commit()
 
         # now if the role was selected to be staff then 
-        new_staff = Staff_profiles(user_id=new_user.id)
-        db.session.add(new_staff)
-        db.session.commit()
+        if role == 'Staff':
+            new_staff = Staff_profiles(user_id=new_user.id)
+            db.session.add(new_staff)
+            db.session.commit()
         # the final flash message of completion
         
         flash("WOOOO-HOOOOO your account was successfully created, now you can log in!!")
@@ -108,10 +109,56 @@ def login():
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' not in session or session.get('role') != 'Admin':
-        # if not in session or not admin role
-        flash("unauthorized access")
+        flash("Unauthorized access")
         return redirect(url_for('login'))
-    return "<h1> Admin Dashboard (under construction) <h1>"
+    
+    # all data for the statistics
+    total_users = User.query.filter_by(role='Trekker').count()
+    total_staff = User.query.filter_by(role='Staff').count()
+    total_treks = Trek.query.count()
+    total_bookings = Booking.query.count()
+    
+    # staff who have not passed the sellection
+    pending_staff = Staff_profiles.query.filter_by(status='pending').all()
+    
+    # sending data to render the template with this data.
+    return render_template('admin-dashboard.html', 
+                           total_users=total_users,
+                           total_staff=total_staff,
+                           total_treks=total_treks,
+                           total_bookings=total_bookings,
+                           pending_staff=pending_staff)
+
+#  approved and reject route
+
+@app.route('/admin/approve_staff/<int:id>', methods=['POST'])
+def approve_staff(id):
+    if 'user_id' not in session or session.get('role') != 'Admin':
+        return redirect(url_for('login'))
+        
+    staff = Staff_profiles.query.get(id)
+    if staff:
+        staff.status = 'Approved'
+        db.session.commit()
+        flash(f"yayya {staff.users.name} user is now part of your staff ")
+        
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/reject_staff/<int:id>', methods=['POST'])
+def reject_staff(id):
+    if 'user_id' not in session or session.get('role') != 'Admin':
+        return redirect(url_for('login'))
+        
+    staff = Staff_profiles.query.get(id)
+    if staff:
+        # We grab the linked user account so we can delete that too
+        user = staff.users 
+        db.session.delete(staff)
+        db.session.delete(user)
+        db.session.commit()
+        flash(f"user {user.name} has been rejected from being a part of staff.")
+        
+    return redirect(url_for('admin_dashboard'))
 @app.route('/staff_dashboard')
 def staff_dashboard():
     if 'user_id' not in session or session.get('role') != 'Staff':

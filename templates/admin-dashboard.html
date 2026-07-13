@@ -1,0 +1,82 @@
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px;">
+    <div class="dashboard-container">
+        
+        <div class="dashboard-header">
+            <h2>Command Center of Doom</h2>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="flash-msg">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p class="stat-number">{{ total_users }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Staff</h3>
+                <p class="stat-number">{{ total_staff }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Active Treks</h3>
+                <p class="stat-number">{{ total_treks }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Bookings</h3>
+                <p class="stat-number">{{ total_bookings }}</p>
+            </div>
+        </div>
+
+        <div class="action-grid">
+            <a href="/admin/treks" class="action-btn">Manage Treks</a>
+            <a href="/admin/users" class="action-btn">Manage Users & Staff</a>
+            <a href="/admin/bookings" class="action-btn">View All Bookings</a>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Should these join our commands??</h3>
+        {% if pending_staff %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Contact</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for staff in pending_staff %}
+                    <tr>
+                        <td>{{ staff.users.name }}</td>
+                        <td>{{ staff.users.username }}</td>
+                        <td>{{ staff.users.contact_details }}</td>
+                        <td>
+                            <form action="/admin/approve_staff/{{ staff.id }}" method="POST" style="display:inline;">
+                                <button type="submit" class="approve-btn">YOU SHALL PASS</button>
+                            </form>
+                            <form action="/admin/reject_staff/{{ staff.id }}" method="POST" style="display:inline;">
+                                <button type="submit" class="reject-btn">YOU SHALL NOT PASS</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No pending staff approvals at this time.(no work for admin yayayay)</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -31,3 +31,21 @@ some mistakes that I remember:
 
 
 A VERY BIG PROBLEM I commited the milestone and didn't check for the mistakes, the mistakes are minor but i am in the fault of not checking it prior to commiting to the repo.
+
+
+admin-dashboard report:
+gonna check it first and then gonna commit this time,
+I am trying to put some gandalf memes although haven't watched lord of the rings lol.
+
+will update what was wrong and all , lmao I forgot to update app.py , will meet after routing
+
+Also I forgot to add reject button, I did it now I am gonna route
+
+
+BIG problem - somewhere int the code I messed up and now my normal user is being in the admin dashboard for approval of becoming a staff, which should not be the case cause I selected a Trekker not Staff_trek, will look at the issue thoroughly.
+
+
+    AHH found it i did not add if while making staff in app.py and therefore it was making everyone staff. 
+    issue fixed.
+
+    
