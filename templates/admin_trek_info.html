@@ -1,0 +1,65 @@
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px; overflow-y: auto;">
+    <div class="dashboard-container" style="max-width: 900px;">
+        
+        <div class="dashboard-header">
+            <h2>Trek Details: {{ trek.trek_name }}</h2>
+            <a href="/admin/treks" class="action-btn" style="background-color: #7f8c8d;">Back to Treks</a>
+        </div>
+
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #ddd; display: flex; justify-content: space-between; flex-wrap: wrap;">
+            <div style="width: 48%; margin-bottom: 10px;"><strong>Location:</strong> {{ trek.location }}</div>
+            <div style="width: 48%; margin-bottom: 10px;"><strong>Difficulty:</strong> {{ trek.difficulty }}</div>
+            <div style="width: 48%; margin-bottom: 10px;"><strong>Start Date:</strong> {{ trek.start_date }}</div>
+            <div style="width: 48%; margin-bottom: 10px;"><strong>Duration:</strong> {{ trek.duration }} hours</div>
+            <div style="width: 48%; margin-bottom: 10px;"><strong>Slots:</strong> {{ trek.bookings|length }} / {{ trek.max_slots }} Booked</div>
+            <div style="width: 48%; margin-bottom: 10px;"><strong>Booking Status:</strong> {{ trek.booking_status }}</div>
+            <div style="width: 48%; margin-bottom: 10px;">
+                <strong>Assigned Guide:</strong> 
+                {% if trek.guide %}
+                    {{ trek.guide.users.name }}
+                {% else %}
+                    <span style="color: #e74c3c;">Unassigned</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <h3>Registered Participants</h3>
+        {% if trek.bookings %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Trekker Name</th>
+                        <th>Start Date</th>
+                        <th>Date Booked</th>
+                        <th>Contact Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in trek.bookings %}
+                    <tr>
+                        <td>#{{ booking.id }}</td>
+                        <td><strong>{{ booking.trekker.name }}</strong></td>
+                        <td>{{ booking.trek.start_date }}</td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ booking.trekker.contact_details }}<br><small>{{ booking.trekker.email_id }}</small></td>
+                        <td>
+                            <span style="font-weight: bold; color: {% if booking.booking_status == 'Booked' or booking.booking_status == 'Completed' %}#27ae60{% elif booking.booking_status == 'Cancelled' or booking.booking_status == 'Rejected' %}#e74c3c{% elif booking.booking_status == 'Pending' %}#f39c12{% else %}#2980b9{% endif %};">
+                                {{ booking.booking_status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align: center; color: #555; padding: 20px;">No participants have booked this trek yet.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

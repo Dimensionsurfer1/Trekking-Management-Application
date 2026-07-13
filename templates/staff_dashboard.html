@@ -1,0 +1,81 @@
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px; overflow-y: auto;">
+    <div class="dashboard-container" style="max-width: 1200px;">
+        
+        <div class="dashboard-header">
+            <h2>Welcome Guide, {{ session['username'] }}</h2>
+            <div>
+                <a href="/profile" class="action-btn" style="background-color: #3498db; margin-right: 10px;">Update Profile</a>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="flash-msg">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h3>My Assigned Treks</h3>
+        {% if assigned_treks %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Trek Name</th>
+                        <th>Location</th>
+                        <th>Date/Status</th>
+                        <th>Available Slots</th>
+                        <th>Registered Count</th>
+                        <th>Actions / Updates</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trek in assigned_treks %}
+                    <tr>
+                        <td><strong>{{ trek.trek_name }}</strong><br><small>{{ trek.difficulty }} | {{ trek.duration }} hrs | <strong>Start: {{ trek.start_date }}</strong></small></td>
+                        <td>{{ trek.location }}</td>
+                        
+                        <!-- Form to update the status -->
+                        <td>
+                            <form action="/staff/update_trek/{{ trek.id }}" method="POST" style="display: flex; gap: 5px; flex-direction: column;">
+                                <select name="booking_status" style="padding: 5px;">
+                                    <option value="Open" {% if trek.booking_status == 'Open' %}selected{% endif %}>Open</option>
+                                    <option value="Started" {% if trek.booking_status == 'Started' %}selected{% endif %}>Started</option>
+                                    <option value="Ongoing" {% if trek.booking_status == 'Ongoing' %}selected{% endif %}>Ongoing</option>
+                                    <option value="Completed" {% if trek.booking_status == 'Completed' %}selected{% endif %}>Completed</option>
+                                    <option value="Closed" {% if trek.booking_status == 'Closed' %}selected{% endif %}>Closed</option>
+                                </select>
+                        </td>
+                        
+                        <!-- Form to update available slots -->
+                        <td>
+                                <input type="number" name="max_slots" value="{{ trek.max_slots }}" required min="0" style="width: 70px; padding: 5px;">
+                        </td>
+                        
+                        <!-- Displaying the count of bookings -->
+                        <td style="text-align: center; font-size: 1.2rem; font-weight: bold; color: #2c3e50;">
+                            {{ trek.bookings|length }}
+                        </td>
+                        
+                        <td>
+                                <button type="submit" class="submit-btn" style="padding: 8px 15px; font-size: 0.9rem; margin-top: 0; margin-bottom: 5px; width: 100%;">Save Updates</button>
+                            </form>
+                            
+                            <!-- Button to view the specific participants -->
+                            <a href="/staff/trek_participants/{{ trek.id }}" class="action-btn" style="background-color: #9b59b6; padding: 8px 15px; font-size: 0.9rem; display: block; text-align: center;">View Participants</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You have not been assigned to any treks yet.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

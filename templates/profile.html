@@ -1,0 +1,45 @@
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px;">
+    <div class="form-container" style="max-width: 500px; width: 90%;">
+        <h2>Update My Profile</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="flash-msg">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+       <form action="/profile" method="POST">
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Username</label>
+            <input type="text" name="username" value="{{ user.username }}" required>
+
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Full Name</label>
+            <input type="text" name="name" value="{{ user.name }}" required>
+            
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Email Address</label>
+            <input type="email" name="email_id" value="{{ user.email_id }}" required>
+            
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Contact Details</label>
+            <input type="text" name="contact_details" value="{{ user.contact_details }}" required>
+            
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">New Password (leave blank to keep current)</label>
+            <input type="password" name="new_password" placeholder="Enter new password...">
+            
+            <button type="submit" class="submit-btn" style="margin-top: 20px;">Save Profile</button>
+        </form>
+        
+        {% set dash_link = '/user_dashboard' %}
+        {% if session['role'] == 'Admin' %}
+            {% set dash_link = '/admin_dashboard' %}
+        {% elif session['role'] == 'Staff' %}
+            {% set dash_link = '/staff_dashboard' %}
+        {% endif %}
+        
+        <a href="{{ dash_link }}" class="back-link">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

@@ -33,7 +33,10 @@
                     <option value="Hard">Hard</option>
                 </select>
 
-                <input type="number" name="duration" placeholder="Duration (Hours)" required min="1" style="width: 150px; padding: 10px;">
+                <input type="number" name="duration" placeholder="Duration (Days)" required min="1" style="width: 150px; padding: 10px;">
+                
+                <input type="date" name="start_date" required style="width: 150px; padding: 10px;" title="Start Date">
+                
                 <input type="number" name="max_slots" placeholder="Max Slots" required min="1" style="width: 120px; padding: 10px;">
                 
                 <select name="staff_assigned_id" style="padding: 10px;">
@@ -87,10 +90,12 @@
                             </span>
                         </td>
                         <td>
+                            <a href="/admin/treks/info/{{ trek.id }}" class="action-btn" style="background-color: #3498db; padding: 6px 12px; font-size: 0.9rem;">Info</a>
+                            
                             <a href="/admin/treks/edit/{{ trek.id }}" class="action-btn" style="background-color: #f39c12; padding: 6px 12px; font-size: 0.9rem;">Edit</a>
                             
                             <form action="/admin/treks/delete/{{ trek.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this trek? This cannot be undone.');">
-                                <button type="submit" class="reject-btn">Delete</button>
+                                <button type="submit" class="reject-btn" style="padding: 6px 12px; font-size: 0.9rem;">Delete</button>
                             </form>
                         </td>
                     </tr>

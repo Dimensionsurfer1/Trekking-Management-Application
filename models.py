@@ -45,6 +45,7 @@ class Trek(db.Model):
     location = db.Column(db.String(250), nullable=False)
     difficulty = db.Column(db.String(20), nullable=False)  # Easy, Moderate , Hard
     duration = db.Column(db.Integer, nullable=False)       # in Hours
+    start_date = db.Column(db.String(20), nullable=False) # NEW: Date field
     max_slots = db.Column(db.Integer, nullable=False)
     booking_status = db.Column(db.String(20), default='Open')  # Pending, Open, Closed are the tags that can be used 
     
@@ -53,7 +54,7 @@ class Trek(db.Model):
     # I think it should be nullable cause maybe we haven't assigned a staff to that trek yet
 
     # Relationships
-    bookings = db.relationship('Booking', backref='trek', lazy=True)
+    bookings = db.relationship('Booking', backref='trek', cascade='all, delete-orphan', lazy=True)
 
     # I used backref before but stating here - It is used for creating a bidirectional access meaning we can access trek from bookings and bookings from trek
 

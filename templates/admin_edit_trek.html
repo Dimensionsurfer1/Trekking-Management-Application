@@ -5,8 +5,9 @@ just minute changes
 {% extends 'TMA_base.html' %}
 
 {% block content %}
-<div class="nature_background" style="align-items: flex-start; padding-top: 100px;">
-    <div class="form-container" style="max-width: 600px; width: 90%;">
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px;">
+    <div class="form-container" style="max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto;">
+        <!-- max-height and overflow-y helps with the form overflowing and since in the main html and body I made overflow hidden I used this. -->
         <h2>Edit Trek: {{ trek.trek_name }}</h2>
 
         <form action="/admin/treks/edit/{{ trek.id }}" method="POST">
@@ -26,6 +27,9 @@ just minute changes
             <label style="text-align: left; font-weight: bold; margin-top: 10px;">Duration (Hours)</label>
             <input type="number" name="duration" value="{{ trek.duration }}" required min="1">
             
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Start Date</label>
+            <input type="date" name="start_date" value="{{ trek.start_date }}" required>
+
             <label style="text-align: left; font-weight: bold; margin-top: 10px;">Max Slots</label>
             <input type="number" name="max_slots" value="{{ trek.max_slots }}" required min="1">
             

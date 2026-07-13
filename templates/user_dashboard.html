@@ -1,0 +1,110 @@
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px; overflow-y: auto;">
+    <div class="dashboard-container" style="max-width: 1200px;">
+        
+        <div class="dashboard-header">
+            <h2>Welcome, {{ session['username'] }}</h2>
+            <div>
+                <a href="/profile" class="action-btn" style="background-color: #3498db; margin-right: 10px;">Update Profile</a>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="flash-msg">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #ddd; text-align: center;">
+            <form action="/user_dashboard" method="GET" style="display: flex; justify-content: center; gap: 10px;">
+                <input type="text" name="q" placeholder="Search locations or names..." value="{{ search_query }}" style="width: 40%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                
+                <select name="difficulty" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="">All Difficulties</option>
+                    <option value="Easy" {% if diff_filter == 'Easy' %}selected{% endif %}>Easy</option>
+                    <option value="Moderate" {% if diff_filter == 'Moderate' %}selected{% endif %}>Moderate</option>
+                    <option value="Hard" {% if diff_filter == 'Hard' %}selected{% endif %}>Hard</option>
+                </select>
+                
+                <button type="submit" class="submit-btn" style="margin-top: 0; padding: 10px 20px;">Filter</button>
+                <a href="/user_dashboard" class="action-btn" style="background-color: #95a5a6; padding: 10px 20px;">Clear</a>
+            </form>
+        </div>
+
+        <h3>Available Treks</h3>
+        {% if open_treks %}
+            <table class="data-table" style="margin-bottom: 40px;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Difficulty</th>
+                        <th>Duration</th>
+                        <th>Slots Available</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trek in open_treks %}
+                    <tr>
+                        <td><strong>{{ trek.trek_name }}</strong></td>
+                        <td>{{ trek.location }}</td>
+                        <td>{{ trek.difficulty }}</td>
+                        <td>{{ trek.duration }} hrs</td>
+                        <td>{{ trek.start_date }}</td>
+                        <td>
+                            {{ trek.max_slots - trek.bookings|length }} / {{ trek.max_slots }}
+                        </td>
+                        <td>
+                            <form action="/user/book/{{ trek.id }}" method="POST" style="display:inline;">
+                                <button type="submit" class="approve-btn" style="background-color: #27ae60;">Book Now</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="margin-bottom: 40px;">No open treks match your search criteria right now.</p>
+        {% endif %}
+
+        <hr class="divider">
+
+        <h3>My Trekking History</h3>
+        {% if my_bookings %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Trek Name</th>
+                        <th>Date Booked</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in my_bookings %}
+                    <tr>
+                        <td>#{{ booking.id }}</td>
+                        <td>{{ booking.trek.trek_name }}</td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <span style="font-weight: bold; color: {% if booking.booking_status == 'Booked' %}#27ae60{% elif booking.booking_status == 'Cancelled' %}#e74c3c{% else %}#2980b9{% endif %};">
+                                {{ booking.booking_status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You haven't booked any treks yet. Time to start an adventure!</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

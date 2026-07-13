@@ -107,6 +107,10 @@ def login():
             return redirect(url_for('login'))
     return render_template ('login.html')
 
+
+
+#           ADMIN BLOCK            
+
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' not in session or session.get('role') != 'Admin':
@@ -190,12 +194,14 @@ def admin_add_trek():
     duration = request.form.get('duration')
     max_slots = request.form.get('max_slots')
     staff_id = request.form.get('staff_assigned_id') # Get the assigned staff ID
-    
+    start_date = request.form.get('start_date')
+
     new_trek = Trek(
         trek_name=trek_name,
         location=location,
         difficulty=difficulty,
         duration=duration,
+        start_date=start_date,
         max_slots=max_slots,
         staff_assigned_id=staff_id if staff_id else None, # Assign them if selected
         booking_status='Open' 
@@ -284,6 +290,7 @@ def admin_edit_trek(id):
         trek.location = request.form.get('location')
         trek.difficulty = request.form.get('difficulty')
         trek.duration = request.form.get('duration')
+        trek.start_date = request.form.get('start_date') # the new update so that we can have dates now
         trek.max_slots = request.form.get('max_slots')
         
         staff_id = request.form.get('staff_assigned_id')
@@ -306,20 +313,238 @@ def admin_view_bookings():
     
     return render_template('admin_bookings.html', bookings=all_bookings)
 
+@app.route('/admin/treks/info/<int:id>')
+def admin_trek_info(id):
+    if 'user_id' not in session or session.get('role') != 'Admin':
+        flash("Unauthorized access")
+        return redirect(url_for('login'))
+        
+    # Fetch the specific trek
+    trek = Trek.query.get(id)
+    
+    if not trek:
+        flash("Trek not found.")
+        return redirect(url_for('admin_manage_treks'))
+        
+    return render_template('admin_trek_info.html', trek=trek)
+
+#                 ADMIN BLOCK
+# Here we end with the admin block and if there were to come some updates it would be inside this
+
+#                 STAFF BLOCK
 
 @app.route('/staff_dashboard')
 def staff_dashboard():
     if 'user_id' not in session or session.get('role') != 'Staff':
         flash("Unauthorized access!")
         return redirect(url_for('login'))
-    return "<h1>Staff Dashboard (Under Construction)</h1>"
+        
+    # Get the logged-in staff member's profile
+    staff_profile = Staff_profiles.query.filter_by(user_id=session['user_id']).first()
+    
+    # Get their assigned treks using the relationship defined in models.py
+    my_treks = staff_profile.assigned_treks
+    
+    return render_template('staff_dashboard.html', assigned_treks=my_treks)
+
+@app.route('/staff/update_trek/<int:id>', methods=['POST'])
+def staff_update_trek(id):
+    if 'user_id' not in session or session.get('role') != 'Staff':
+        return redirect(url_for('login'))
+        
+    trek = Trek.query.get(id)
+    staff_profile = Staff_profiles.query.filter_by(user_id=session['user_id']).first()
+    
+    if trek and trek.staff_assigned_id == staff_profile.id:
+        trek.booking_status = request.form.get('booking_status')
+        new_trek_status = request.form.get('trek_status')
+        trek.max_slots = request.form.get('max_slots')
+        
+        # Check if the guide just marked the trek as "Completed"
+        if new_trek_status == 'Completed' and trek.trek_status != 'Completed':
+            # Loop through all participants and auto-complete their personal booking status!
+            for booking in trek.bookings:
+                if booking.booking_status == 'Booked':
+                    booking.booking_status = 'Completed'
+                    
+        trek.trek_status = new_trek_status
+        db.session.commit()
+        flash(f"Successfully updated details for '{trek.trek_name}'.")
+    else:
+        flash("You are not authorized to edit this trek.")
+        
+    return redirect(url_for('staff_dashboard'))
+
+# approving the user or not is routed down here
+
+@app.route('/staff/approve_booking/<int:booking_id>', methods=['POST'])
+def staff_approve_booking(booking_id):
+    if 'user_id' not in session or session.get('role') != 'Staff':
+        return redirect(url_for('login'))
+        
+    booking = Booking.query.get(booking_id)
+    staff_profile = Staff_profiles.query.filter_by(user_id=session['user_id']).first()
+    
+    if booking and booking.trek.staff_assigned_id == staff_profile.id:
+        booking.booking_status = 'Booked' # Change from Pending to Booked!
+        db.session.commit()
+        flash(f"Approved {booking.trekker.name}'s request to join the trek!")
+        
+    return redirect(url_for('staff_view_participants', id=booking.trek_id))
+
+@app.route('/staff/reject_booking/<int:booking_id>', methods=['POST'])
+def staff_reject_booking(booking_id):
+    if 'user_id' not in session or session.get('role') != 'Staff':
+        return redirect(url_for('login'))
+        
+    booking = Booking.query.get(booking_id)
+    staff_profile = Staff_profiles.query.filter_by(user_id=session['user_id']).first()
+    
+    if booking and booking.trek.staff_assigned_id == staff_profile.id:
+        booking.booking_status = 'Rejected'
+        db.session.commit()
+        flash(f"Rejected {booking.trekker.name}'s booking request.")
+        
+    return redirect(url_for('staff_view_participants', id=booking.trek_id))
+
+
+@app.route('/staff/trek_participants/<int:id>')
+def staff_view_participants(id):
+    if 'user_id' not in session or session.get('role') != 'Staff':
+        return redirect(url_for('login'))
+        
+    trek = Trek.query.get(id)
+    staff_profile = Staff_profiles.query.filter_by(user_id=session['user_id']).first()
+    
+    if trek and trek.staff_assigned_id == staff_profile.id:
+        
+        return render_template('staff_participants.html', trek=trek)
+        
+    flash("You are not authorized to view this trek.")
+    return redirect(url_for('staff_dashboard'))
+
+#                 STAFF BLOCK
+
+
+#                 USER BLOCK
 
 @app.route('/user_dashboard')
 def user_dashboard():
     if 'user_id' not in session or session.get('role') != 'Trekker':
         flash("Unauthorized access!")
         return redirect(url_for('login'))
-    return "<h1>Trekker Dashboard (Under Construction)</h1>"
+        
+    search_query = request.args.get('q', '')
+    diff_filter = request.args.get('difficulty', '')
+    
+    # 1. Start with all Open treks
+    query = Trek.query.filter_by(booking_status='Open')
+    
+    # 2. Apply text search if it exists
+    if search_query:
+        query = query.filter(
+            or_(
+                Trek.trek_name.ilike(f'%{search_query}%'),
+                Trek.location.ilike(f'%{search_query}%')
+            )
+        )
+        
+    # 3. Apply difficulty filter if it exists
+    if diff_filter:
+        query = query.filter_by(difficulty=diff_filter)
+        
+    open_treks = query.all()
+    
+    # 4. Fetch the user's specific booking history
+    my_bookings = Booking.query.filter_by(user_id=session['user_id']).order_by(Booking.id.desc()).all()
+    
+    return render_template('user_dashboard.html', 
+                           open_treks=open_treks, 
+                           my_bookings=my_bookings, 
+                           search_query=search_query, 
+                           diff_filter=diff_filter)
+
+@app.route('/user/book/<int:trek_id>', methods=['POST'])
+def book_trek(trek_id):
+    if 'user_id' not in session or session.get('role') != 'Trekker':
+        return redirect(url_for('login'))
+        
+    trek = Trek.query.get(trek_id)
+    user_id = session['user_id']
+    
+    if not trek or trek.booking_status != 'Open':
+        flash("This trek is no longer available.")
+        return redirect(url_for('user_dashboard'))
+        
+    # PDF Requirement: Prevent overbooking beyond available slots
+    current_bookings_count = len(trek.bookings)
+    if current_bookings_count >= trek.max_slots:
+        flash("Sorry, this trek is completely full!")
+        return redirect(url_for('user_dashboard'))
+        
+    # Prevent the user from double-booking the same trek
+    existing_booking = Booking.query.filter_by(user_id=user_id, trek_id=trek.id, booking_status='Booked').first()
+    if existing_booking:
+        flash("You have already booked this trek!")
+        return redirect(url_for('user_dashboard'))
+        
+    # Create the booking
+    # Create the booking and set it to Pending
+    new_booking = Booking(user_id=user_id, trek_id=trek.id, booking_status='Pending')
+    db.session.add(new_booking)
+    db.session.commit()
+    
+    flash(f"Success! You have booked your spot for {trek.trek_name}.")
+    return redirect(url_for('user_dashboard'))
+
+
+#               USER BLOCK
+
+# common block
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    if 'user_id' not in session:
+        flash("Please log in to view your profile.")
+        return redirect(url_for('login'))
+        
+    user = User.query.get(session['user_id'])
+    
+    if request.method == 'POST':
+        new_username = request.form.get('username')
+        new_password = request.form.get('new_password')
+        
+        # 1. Check if they changed their username, and if the new one is available
+        if new_username != user.username:
+            existing_user = User.query.filter_by(username=new_username).first()
+            if existing_user:
+                flash("That username is already taken. Please choose another one.")
+                return redirect(url_for('profile'))
+            user.username = new_username
+            session['username'] = new_username # Update the session so the header changes immediately!
+
+        # 2. Check if they typed a new password
+        if new_password: # Only update if the field isn't blank
+            user.password = generate_password_hash(new_password)
+            
+        # 3. Update the rest of their details
+        user.name = request.form.get('name')
+        user.email_id = request.form.get('email_id')
+        user.contact_details = request.form.get('contact_details')
+        
+        db.session.commit()
+        flash("Your profile has been successfully updated!")
+        
+        # Smart Redirect back to their specific dashboard
+        role = session.get('role')
+        if role == 'Admin':
+            return redirect(url_for('admin_dashboard'))
+        elif role == 'Staff':
+            return redirect(url_for('staff_dashboard'))
+        else:
+            return redirect(url_for('user_dashboard'))
+            
+    return render_template('profile.html', user=user)
 
 @app.route('/logout')
 def logout():

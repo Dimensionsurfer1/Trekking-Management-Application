@@ -17,44 +17,33 @@ Hey! This is my project for the Modern Application Development I (MAD-I) course.
 
 ## Difficulties faced:
 
-in the second milestone:
-I forgot to maintain this part of the difficulty faced.
-some mistakes that I remember:
+I have now completed milestone 3 and will move on to the next milestone.
 
-1. I was very confused with the wasy I structured the home page and all so at the end I made it as simple as possible with two button and heading and slogan with bg picture.
+I will first make user dashboard soo that I can make bookings and then it will also show upon admin's booking track page.
 
-2. I got confused and made two separate css files thinking that it would be better to make one for each page but then in a yt video it said it would be better to just use one cause you can use previous classes and also you won't have to make it again and again, if the nav bar is in all the pages i would have had to iterate every page but that is the case no more.
+alright soo I have completed the whole project,
+in the other milestones there are a lot of things that were overlapping the starting 4 milestones and while making the 4th one I saw the other milestones and just thougt it would be better to commit it fully now.
 
-3. while routing and making the function inside it I did not think the procedure and directly started coding, I then realised I messed up things and then made a flow in my copy and then wrote the code for it.
+there were a lot of mistakes again 
 
-4. This mistake is yet to be fixed, with this update I will fix it. The problem was that I imported the hashing system from "werkzeug.security" and it would work but the problem is that I have stated my password already and it is not hashed so when I will login and the password I type in will be hashed but the saved password is not hashed so it would not match in my db, for that I will update my init_db.py to hash the password.
+1. I tested the delete option and then I ended up with an error from the database sqllite, the problem was that I was deleting the user but the bookings were still there and they needed the user id to keep the booking. I just put the cascading = all in the bookings relationship in models.py
 
+2. I had to make changes in the db by adding the start_date so that I can state when the trek is gonna start and for that I had to remove all the data that was stored before(there was one other way but it was a lot to learn in such short time and I didn't have that much data).
 
-A VERY BIG PROBLEM I commited the milestone and didn't check for the mistakes, the mistakes are minor but i am in the fault of not checking it prior to commiting to the repo.
+3. because of these a lot of things had to be changed in the html and css plus also in the routes so that they can process the data store it and then it can be used later by other parts of the code.
 
+4. VS code is still marking some part of my code red where I used jinja2 logics inside a style. I really don't know what I can do about it currently I am just ignoring the problem but I think in future it would affect me cause I would not be able to pinpoint a real bug that easily. 
 
-admin-dashboard report:
-gonna check it first and then gonna commit this time,
-I am trying to put some gandalf memes although haven't watched lord of the rings lol.
+future things I wanna add
 
-will update what was wrong and all , lmao I forgot to update app.py , will meet after routing
+I definetly wanna improve my css in the futurem the other extra milestones will be lovely to perform but I don't have time the submission is today only.
 
-Also I forgot to add reject button, I did it now I am gonna route
+I would wanna implement more tables and more attributes in the current tables so that it can be proper and I have thought of ways it can be more amazing with API integration and all but for that I will have to research if that can happen or not.
 
+My opinion
 
-BIG problem - somewhere int the code I messed up and now my normal user is being in the admin dashboard for approval of becoming a staff, which should not be the case cause I selected a Trekker not Staff_trek, will look at the issue thoroughly.
+It is a very decent site the color pallet and everything looks pleasing to the eye and also a bit more nature related.
 
+not everyone will be pleased with the er diagram that much cause there are not that many tables and not that many attributes to those tables.
 
-    AHH found it i did not add if while making staff in app.py and therefore it was making everyone staff. 
-    issue fixed.
-
-New problem 
-in the Admin_treks I made a css for status-badge but the problem is that I had 3 types of badges and I for that reason I used jinja2 conditional logic inside the css but the vscode is throwing error.
-
-I asked AI what is happenign and should I just make different class for each one and then style it.
-It stated that this issue is not my problem it's just that vs code expects a color after the color attribute not a jinja2 logic therefore it is giving a problem.
-IDK how to solve this problem, this might be the first time I have crossed through this.
-
-so I tested a bit and a lot of probles have come up, when I build an Id and I approve it to be a trekker and then I go to the user and staff management dashboard inside admin then I am unable to see that person's role change while it is coming up in search as a staff.
-
-alright soo the logic is there but I would need to build the user dashboard and all the things user would want and also for the staff dashboard before I can test the bookings tab and test it.
+but it is fine for the first time, can definitely improve.

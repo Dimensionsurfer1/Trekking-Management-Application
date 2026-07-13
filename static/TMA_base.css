@@ -283,7 +283,8 @@ margin-top: 10px;
 .data-table th, .data-table td {
 border: 1px solid #ddd;
 padding: 12px;
-text-align: left;
+text-align: center;
+vertical-align: middle;
 }
 
 .data-table th {
