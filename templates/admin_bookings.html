@@ -1,0 +1,48 @@
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px; overflow-y: auto;">
+    <div class="dashboard-container" style="max-width: 1000px;">
+        
+        <div class="dashboard-header">
+            <h2>All Bookings & Trekking History</h2>
+            <div>
+                <a href="/admin_dashboard" class="action-btn" style="background-color: #7f8c8d; margin-right: 10px;">Back to Dashboard</a>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </div>
+
+        {% if bookings %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Trekker Name</th>
+                        <th>Trek Name</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.trekker.name }}</td> 
+                        <td>{{ booking.trek.trek_name }}</td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <span style="font-weight: bold; color: {% if booking.booking_status == 'Booked' %}#27ae60{% elif booking.booking_status == 'Cancelled' %}#e74c3c{% else %}#2980b9{% endif %};">
+                                {{ booking.booking_status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align: center; color: #555;">No bookings have been made yet.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

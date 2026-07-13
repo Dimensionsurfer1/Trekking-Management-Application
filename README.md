@@ -57,3 +57,4 @@ IDK how to solve this problem, this might be the first time I have crossed throu
 
 so I tested a bit and a lot of probles have come up, when I build an Id and I approve it to be a trekker and then I go to the user and staff management dashboard inside admin then I am unable to see that person's role change while it is coming up in search as a staff.
 
+alright soo the logic is there but I would need to build the user dashboard and all the things user would want and also for the staff dashboard before I can test the bookings tab and test it.

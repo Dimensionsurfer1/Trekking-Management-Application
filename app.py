@@ -161,7 +161,7 @@ def reject_staff(id):
         
     return redirect(url_for('admin_dashboard'))
 
-# adding sub parts of admin that need to be build funder here
+# adding sub parts of admin that need to be build under here
 # just below the admin-board so it's in sequence
 
 @app.route('/admin/treks')
@@ -294,8 +294,17 @@ def admin_edit_trek(id):
         return redirect(url_for('admin_manage_treks'))
         
     return render_template('admin_edit_trek.html', trek=trek, approved_staff=approved_staff)
-
-
+ #last part of the admin board, making the booking table and making it editable.
+@app.route('/admin/bookings')
+def admin_view_bookings():
+    if 'user_id' not in session or session.get('role') != 'Admin':
+        flash("Unauthorized access")
+        return redirect(url_for('login'))
+        
+    # here we are fetching all the bookings and the newset ones will be the first.
+    all_bookings = Booking.query.order_by(Booking.id.desc()).all()
+    
+    return render_template('admin_bookings.html', bookings=all_bookings)
 
 
 @app.route('/staff_dashboard')
