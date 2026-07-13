@@ -1,0 +1,77 @@
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 50px; overflow-y: auto;">
+    <div class="dashboard-container" style="max-width: 1200px;">
+        
+        <div class="dashboard-header">
+            <h2>User & Staff Management</h2>
+            <div>
+                <a href="/admin_dashboard" class="action-btn" style="background-color: #7f8c8d; margin-right: 10px;">Back to Dashboard</a>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="flash-msg">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #ddd; text-align: center;">
+            <form action="/admin/users" method="GET" style="display: flex; justify-content: center; gap: 10px;">
+                <input type="text" name="q" placeholder="Search by Name, Username, or ID..." value="{{ search_query }}" style="width: 60%; padding: 12px; border-radius: 5px; border: 1px solid #ccc;">
+                <button type="submit" class="submit-btn" style="margin-top: 0; padding: 12px 25px;">Search</button>
+                <a href="/admin/users" class="action-btn" style="background-color: #95a5a6; padding: 12px 25px;">Clear</a>
+            </form>
+        </div>
+
+        <h3>System Users</h3>
+        {% if users %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email_id }}</td>
+                        <td>{{ user.contact_details }}</td>
+                        <td>
+                            <span style="font-weight: bold; color: {% if user.role == 'Staff' %}#2980b9{% else %}#27ae60{% endif %};">
+                                {{ user.role }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if user.role != 'Admin' %}
+                            <form action="/admin/users/blacklist/{{ user.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to BLACKLIST and remove this user?');">
+                                <button type="submit" class="reject-btn" style="background-color: #000; color: white;">Blacklist</button>
+                            </form>
+                            {% else %}
+                            <span style="color: gray; font-size: 0.9rem;">Superadmin</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No users found matching your search.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

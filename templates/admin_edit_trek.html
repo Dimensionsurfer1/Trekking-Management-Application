@@ -1,0 +1,48 @@
+<!--
+I am glad this one is identical to form creation done before with
+just minute changes
+-->
+{% extends 'TMA_base.html' %}
+
+{% block content %}
+<div class="nature_background" style="align-items: flex-start; padding-top: 100px;">
+    <div class="form-container" style="max-width: 600px; width: 90%;">
+        <h2>Edit Trek: {{ trek.trek_name }}</h2>
+
+        <form action="/admin/treks/edit/{{ trek.id }}" method="POST">
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Trek Name</label>
+            <input type="text" name="trek_name" value="{{ trek.trek_name }}" required>
+            
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Location</label>
+            <input type="text" name="location" value="{{ trek.location }}" required>
+            
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Difficulty</label>
+            <select name="difficulty" required>
+                <option value="Easy" {% if trek.difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                <option value="Moderate" {% if trek.difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
+                <option value="Hard" {% if trek.difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+            </select>
+
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Duration (Hours)</label>
+            <input type="number" name="duration" value="{{ trek.duration }}" required min="1">
+            
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Max Slots</label>
+            <input type="number" name="max_slots" value="{{ trek.max_slots }}" required min="1">
+            
+            <label style="text-align: left; font-weight: bold; margin-top: 10px;">Assign Guide</label>
+            <select name="staff_assigned_id">
+                <option value="">Unassigned</option>
+                {% for staff in approved_staff %}
+                    <option value="{{ staff.id }}" {% if trek.staff_assigned_id == staff.id %}selected{% endif %}>
+                        {{ staff.users.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit" class="submit-btn" style="margin-top: 20px;">Save Changes</button>
+        </form>
+        
+        <a href="/admin/treks" class="back-link">Cancel</a>
+    </div>
+</div>
+{% endblock %}

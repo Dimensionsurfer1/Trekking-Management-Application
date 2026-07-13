@@ -48,4 +48,12 @@ BIG problem - somewhere int the code I messed up and now my normal user is being
     AHH found it i did not add if while making staff in app.py and therefore it was making everyone staff. 
     issue fixed.
 
-    
+New problem 
+in the Admin_treks I made a css for status-badge but the problem is that I had 3 types of badges and I for that reason I used jinja2 conditional logic inside the css but the vscode is throwing error.
+
+I asked AI what is happenign and should I just make different class for each one and then style it.
+It stated that this issue is not my problem it's just that vs code expects a color after the color attribute not a jinja2 logic therefore it is giving a problem.
+IDK how to solve this problem, this might be the first time I have crossed through this.
+
+so I tested a bit and a lot of probles have come up, when I build an Id and I approve it to be a trekker and then I go to the user and staff management dashboard inside admin then I am unable to see that person's role change while it is coming up in search as a staff.
+
