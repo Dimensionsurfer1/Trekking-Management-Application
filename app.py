@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trekking_app_data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # already stated previously in I think init_db
 
-app.config['SECRETE_KEY'] = 'spy_from_blood_on_the_clock_tower'
+app.config['SECRET_KEY'] = 'spy_from_blood_on_the_clock_tower'
 # this is to securely encrypt user session, I key is related to my fav board game and one of it's charachter 
 
 db.init_app(app)
@@ -27,7 +27,7 @@ def home():
 #let's make signuo first
 @app.route('/signup', methods=['GET','POST'])
 def signup():
-    if request.method == 'post':
+    if request.method == 'POST':
         name = request.form.get('name')
         username = request.form.get('username')
         email = request.form.get('email_id')
@@ -40,7 +40,7 @@ def signup():
         # basically filters and then checks for the first value
         if existing_user:
             flash("This email id or username already exists! please choose a different one")
-            return redirect(url_for(signup))
+            return redirect(url_for('signup'))
         # now if the person signs up perfectly then
         # we have got all the details now we store data, but before that we hash password with our new imports
         hased_password = generate_password_hash(password)
@@ -62,8 +62,10 @@ def signup():
         db.session.add(new_staff)
         db.session.commit()
         # the final flash message of completion
+        
         flash("WOOOO-HOOOOO your account was successfully created, now you can log in!!")
         return redirect(url_for('login'))
+    return render_template('signup.html')
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -91,11 +93,11 @@ def login():
 
             # now to each their own dashboard
             if user.role == 'Admin':
-                return redirect(url_for('admin-dashboard'))
+                return redirect(url_for('admin_dashboard'))
             elif user.role == 'Staff':
-                return redirect(url_for('staff-dashboard'))
+                return redirect(url_for('staff_dashboard'))
             else:
-                return redirect(url_for('user-dashboard'))
+                return redirect(url_for('user_dashboard'))
         # else for wrong username or password
 
         else:
@@ -103,12 +105,12 @@ def login():
             return redirect(url_for('login'))
     return render_template ('login.html')
 
-@app.route('/admin-dashboard')
+@app.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' not in session or session.get('role') != 'Admin':
         # if not in session or not admin role
         flash("unauthorized access")
-        return redirect(url_for(login))
+        return redirect(url_for('login'))
     return "<h1> Admin Dashboard (under construction) <h1>"
 @app.route('/staff_dashboard')
 def staff_dashboard():

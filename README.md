@@ -28,3 +28,6 @@ some mistakes that I remember:
 3. while routing and making the function inside it I did not think the procedure and directly started coding, I then realised I messed up things and then made a flow in my copy and then wrote the code for it.
 
 4. This mistake is yet to be fixed, with this update I will fix it. The problem was that I imported the hashing system from "werkzeug.security" and it would work but the problem is that I have stated my password already and it is not hashed so when I will login and the password I type in will be hashed but the saved password is not hashed so it would not match in my db, for that I will update my init_db.py to hash the password.
+
+
+A VERY BIG PROBLEM I commited the milestone and didn't check for the mistakes, the mistakes are minor but i am in the fault of not checking it prior to commiting to the repo.
