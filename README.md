@@ -17,18 +17,14 @@ Hey! This is my project for the Modern Application Development I (MAD-I) course.
 
 ## Difficulties faced:
 
-1. The biggest challenge that I faced was that I wanted both my users and staff table to have contact info but the problem was I made it so that it called for sepearate contacts in both the table, the problem arises if a person updates his/her profile contact then it will have to be updated in both the table and also I will have to store two seperate contacts for a single user, which is not ideal. To solve it I used the decorator to call upon the contacts from the user table.
+in the second milestone:
+I forgot to maintain this part of the difficulty faced.
+some mistakes that I remember:
 
-2. I also got stuck thinking what will happen if user deletes his/her data, and worse if they were staff member I would have to delete all the data from both the tables, I looked online for the solution and came across this (cascade="all, delete-orphan") This management rule decides what happens once the parent is deleted and orphan data is left
+1. I was very confused with the wasy I structured the home page and all so at the end I made it as simple as possible with two button and heading and slogan with bg picture.
 
-3. some small mistakes that i made was with the first letter capital letter when we write db.Column but it is not the same case for db.relationship, still have to figure this out.
+2. I got confused and made two separate css files thinking that it would be better to make one for each page but then in a yt video it said it would be better to just use one cause you can use previous classes and also you won't have to make it again and again, if the nav bar is in all the pages i would have had to iterate every page but that is the case no more.
 
-after testing db:
+3. while routing and making the function inside it I did not think the procedure and directly started coding, I then realised I messed up things and then made a flow in my copy and then wrote the code for it.
 
-1.there were a lot of mistakes, like while making Foreignkey the K should be capital, and more with the capital letter once also wrote ProfileStaff while my table was named profile_staff
-2. I did not remove the manual contact so it was having conflict basically overriding the data.
-
-This is the completion of the milestone 1
-I encountered countless spelling mistakes like user and users, it must be there in my previous commit too also I made a init_db.py to initialize the databse and also I inserted an admin with name Aryan Saxena.
-
-this is a small change commit cause I have been using a diff account to push code to this repo
+4. This mistake is yet to be fixed, with this update I will fix it. The problem was that I imported the hashing system from "werkzeug.security" and it would work but the problem is that I have stated my password already and it is not hashed so when I will login and the password I type in will be hashed but the saved password is not hashed so it would not match in my db, for that I will update my init_db.py to hash the password.
