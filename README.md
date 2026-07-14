@@ -43,7 +43,9 @@ Start the Flask development server: python app.py
 7. Access the App
 Open your web browser and navigate to: http://127.0.0.1:5000 or whatever you set your port to.
 
-
+I have made a mistake of naming my local git config to 23f3001234 while it should have been 23f2005368
+I should have looked more closely before commiting this is the second time 1st time it was my main git HUB Id i did not see it then and I could not see now.
 
 
 With this my core requirements for this application are all complete.
+
