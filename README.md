@@ -13,37 +13,37 @@ Hey! This is my project for the Modern Application Development I (MAD-I) course.
 3. **User (Trekker):** Registers, searches/filters open treks, and books trips.
 
 ## How to Run Locally
-*(Will add exact commands once the virtual environment and app.py are set up!)*
+How to Run Locally
+Follow these steps to set up and run the Trek Management App on your local machine.
 
-## Difficulties faced:
+1. Clone the repository
+First, download the code and navigate into the project folder:
+git clone <your-github-repo-url>
+cd <your-project-folder-name>
 
-I have now completed milestone 3 and will move on to the next milestone.
+2. Create a virtual environment
+It is highly recommended to run this project inside a virtual environment to keep dependencies isolated.
+python -m venv .venv
 
-I will first make user dashboard soo that I can make bookings and then it will also show upon admin's booking track page.
+3. Activate the virtual environment
+Activate the environment based on your operating system:
+.venv\Scripts\activate
 
-alright soo I have completed the whole project,
-in the other milestones there are a lot of things that were overlapping the starting 4 milestones and while making the 4th one I saw the other milestones and just thougt it would be better to commit it fully now.
+4. Install dependencies
+Install all required Python packages (like Flask and Flask-SQLAlchemy): pip install -r requirements.txt
 
-there were a lot of mistakes again 
+5. Initialize the Database
+Before running the app for the first time, you need to generate the SQLite database and create the default Superadmin account. Run the initialization script from your terminal:
+        python init_db.py
+(Note: This script will create the trekking_app_data.db file and automatically generate an Admin user with the username superadmin and password admin123*).
 
-1. I tested the delete option and then I ended up with an error from the database sqllite, the problem was that I was deleting the user but the bookings were still there and they needed the user id to keep the booking. I just put the cascading = all in the bookings relationship in models.py
+6. Run the application
+Start the Flask development server: python app.py
 
-2. I had to make changes in the db by adding the start_date so that I can state when the trek is gonna start and for that I had to remove all the data that was stored before(there was one other way but it was a lot to learn in such short time and I didn't have that much data).
+7. Access the App
+Open your web browser and navigate to: http://127.0.0.1:5000 or whatever you set your port to.
 
-3. because of these a lot of things had to be changed in the html and css plus also in the routes so that they can process the data store it and then it can be used later by other parts of the code.
 
-4. VS code is still marking some part of my code red where I used jinja2 logics inside a style. I really don't know what I can do about it currently I am just ignoring the problem but I think in future it would affect me cause I would not be able to pinpoint a real bug that easily. 
 
-future things I wanna add
 
-I definetly wanna improve my css in the futurem the other extra milestones will be lovely to perform but I don't have time the submission is today only.
-
-I would wanna implement more tables and more attributes in the current tables so that it can be proper and I have thought of ways it can be more amazing with API integration and all but for that I will have to research if that can happen or not.
-
-My opinion
-
-It is a very decent site the color pallet and everything looks pleasing to the eye and also a bit more nature related.
-
-not everyone will be pleased with the er diagram that much cause there are not that many tables and not that many attributes to those tables.
-
-but it is fine for the first time, can definitely improve.
+With this my core requirements for this application are all complete.

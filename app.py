@@ -552,6 +552,6 @@ def logout():
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
  # I have set the debug to be true so that If anything occurs I won't have to restart app again and again
  
