@@ -18,7 +18,7 @@ def initialize_database():
         db.create_all()
         print("Tables created successfully!")
         
-        # Insert a valid admin record matching our new schema constraints
+        
         admin = User(
             username="superadmin",
             password = generate_password_hash("admin123*"), # must work
